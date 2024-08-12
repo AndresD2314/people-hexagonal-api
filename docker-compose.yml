@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  my-people-db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: people-db
+      MYSQL_USER: andres
+      MYSQL_PASSWORD: 1234
+    volumes:
+      - my-people-db-volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p1234 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  app-hexagonal-people:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      my-people-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://my-people-db:3306/people-db
+      SPRING_DATASOURCE_USERNAME: andres
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+volumes:
+  my-people-db-volume:
