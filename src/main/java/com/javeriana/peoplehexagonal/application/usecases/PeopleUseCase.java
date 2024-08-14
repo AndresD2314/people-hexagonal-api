@@ -25,12 +25,22 @@ public class PeopleUseCase implements PeopleInputPort {
     }
 
     @Override
+    public People getPeopleByEmail(String email) {
+        return peopleOutputPort.findByEmail(email);
+    }
+
+    @Override
     public People createNewPeople(People people) {
         return peopleOutputPort.save(people);
     }
 
     @Override
     public People updatePeople(Long id, People people) {
+        People existingPerson = peopleOutputPort.findByEmail(people.getEmail());
+
+        if (existingPerson != null && !existingPerson.getId().equals(id))
+            throw new IllegalArgumentException("Este email esta siendo usado por otra persona");
+
         People updatedPeople = peopleOutputPort.findById(id);
 
         if (updatedPeople != null) {

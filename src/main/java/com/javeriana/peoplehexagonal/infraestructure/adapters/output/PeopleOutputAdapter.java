@@ -33,7 +33,17 @@ public class PeopleOutputAdapter implements PeopleOutputPort {
     }
 
     @Override
+    public People findByEmail(String email) {
+        return peopleMapper.fromEntityToDomain(peopleEntityRepository.findByEmail(email));
+    }
+
+    @Override
     public People save(People people) {
+        PeopleEntity existingPeople = peopleEntityRepository.findByEmail(people.getEmail());
+
+        if (existingPeople != null)
+            throw new IllegalArgumentException("Este email ya se encuentra en uso");
+
         PeopleEntity entity = peopleMapper.fromDomainToEntity(people);
         return peopleMapper.fromEntityToDomain(peopleEntityRepository.save(entity));
     }

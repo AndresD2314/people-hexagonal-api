@@ -8,6 +8,7 @@ public interface PeopleInputPort {
 
     List<People> getAllPeople();
     People getPeopleById(Long id);
+    People getPeopleByEmail(String email);
     People createNewPeople(People people);
     People updatePeople(Long id, People people);
     void deletePeople(Long id);

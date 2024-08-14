@@ -38,6 +38,15 @@ public class PeopleController {
         return ResponseEntity.ok(peopleMapper.fromDomainToResponse(people));
     }
 
+    @GetMapping("/{email}")
+    public ResponseEntity<PeopleResponse> getPeopleByEmail(@PathVariable String email) {
+        People people = peopleInputPort.getPeopleByEmail(email);
+        if (people == null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(peopleMapper.fromDomainToResponse(people));
+    }
+
+
     @PostMapping
     public ResponseEntity<PeopleResponse> createNewPeople(@RequestBody PeopleRequest request) {
         People people = peopleMapper.fromRequestToDomain(request);

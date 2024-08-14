@@ -8,4 +8,5 @@ public class PeopleRequest {
     private String lastName;
     private Integer age;
     private Long phone;
+    private String email;
 }
