@@ -20,6 +20,7 @@ services:
       start_period: 30s
 
   app-hexagonal-people:
+    image: app-hexagonal-people:1.1.0
     build: .
     ports:
       - "8080:8080"
